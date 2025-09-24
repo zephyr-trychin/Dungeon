@@ -11,10 +11,9 @@ public class Dungeon extends JPanel {
     int width = 500;
     int height = 500;
     int[] ARGB;
-    double angleX, angleY, angleZ;
-
-    Vector<Shape> shapes = new Vector<Shape>();
-    int curShape = 0;
+    double angle = 0;
+    double xPos = 100;
+    double yPos = 100;
 
     BufferedImage smiley_image = null;
     BufferedImage rgb_image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
@@ -103,7 +102,28 @@ public class Dungeon extends JPanel {
             ARGB[i] = RenderSettings.get().backgroundColor;
         }
 
+        move (0.5, g);
+        turn (2);
+        move (0.2, g);
+
         rgb_image.setRGB(0, 0, width, height, ARGB, 0, width);
         g.drawImage(rgb_image, 0, 0, null);
+    }
+
+    public void move (double length, Graphics g) {
+        double tempX = xPos;
+        double tempY = yPos;
+        xPos += Math.cos(angle) * length;
+        yPos += Math.sin(angle) * length;
+        Painter.drawLine(tempX, tempY, xPos, yPos, renderSettings.get().foregroundColor, 0, g)
+    }
+
+    public void turn (double ang) {
+        angle += ang;
+        if (angle >= Math.PI * 2) {
+            angle -= Math.PI * 2;
+        } else if (angle <= Math.PI * -2) {
+            angle += Math.PI * 2;
+        }
     }
 }
